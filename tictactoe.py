@@ -180,6 +180,7 @@ main()  # Starts the main loop initially
 
 
 #=========Extremely Advanced============
+# Create a TKINTER frame and add all this code to it.
 #Allow one central area to pick modes for PvP or PvC, or grid size(3x3 vs 5x5 vs 7x7)
 #Train the computer to get better with AI libraries
 #Expand the grid to be not just 3x3 but 4x4 or 5x5
