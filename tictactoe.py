@@ -2,7 +2,6 @@
 import random
 
 #Global Variables
-
 board = ["-", "-", "-",
          "-", "-", "-",
          "-", "-", "-"]
@@ -10,7 +9,12 @@ board = ["-", "-", "-",
 currentPlayer = "X"
 winner = None
 gameRunning = True
-gameMode = None #Option for player to choose GameMode
+gameMode = None         # Option for player to choose GameMode
+
+player1_wins = 0
+player2_wins = 0
+computer_wins = 0
+starting_player = "X"   # Track who starts the game
 
 # Printing the game board
 def printBoard(board):
@@ -68,11 +72,22 @@ def checkTie(board):
 
 
 def checkGameWin():
-    global gameRunning
+    global gameRunning, player1_wins, player2_wins, computer_wins
     if checkDiagonal(board) or checkHorizontal(board) or checkVert(board):
-        printBoard(board) #Shows the Final Board
+        printBoard(board)   # Shows the Final Board
         print(f"The Winner is {winner}")
         gameRunning = False
+        if winner == "X":
+            if gameMode == "PP":
+                player1_wins += 1      
+            else:
+                player1_wins += 1      # If gamemode is PvP then add win to Player X no matter what if Player X wins
+        elif winner == "O":
+            if gameMode == "PP":
+                player2_wins += 1
+            else:
+                computer_wins += 1
+        displayWinTotals()              # Displays Totals vs each player
         restartGame()
         
 
@@ -98,7 +113,7 @@ def computer(board):
 
 # Restart the game
 def restartGame():
-    global board, currentPlayer, winner, gameRunning
+    global board, currentPlayer, winner, gameRunning, starting_player
     restart = input("Do you want to play again? (y/n): ").lower()
     if restart == 'y':
         board = ["-", "-", "-", 
@@ -107,10 +122,23 @@ def restartGame():
         currentPlayer = "X"
         winner = None
         gameRunning = True
-        main()  # Restart the main loop
+        # Alternate starting player
+        starting_player = "O" if starting_player == "X" else "X"
+        currentPlayer = starting_player
+        main()        # Restart the main loop
     else:
         gameRunning = False
         print("Thanks for playing!")
+
+
+# Display win totals
+def displayWinTotals():
+    if gameMode == "PP":
+        print(f"Player 1 (X) Total Wins: {player1_wins}")
+        print(f"Player 2 (O) Total Wins: {player2_wins}")
+    else:
+        print(f"Player Wins: {player1_wins}")
+        print(f"Computer Wins: {computer_wins}")
 
 
 # Main game loop
@@ -125,25 +153,20 @@ def main():
     elif gameMode == "C":
         print("You have selected Player vs Computer mode.")
 
+
     while gameRunning:
         printBoard(board)
         if winner != None:
             break
-        if gameMode == "PP" or (gameMode == "C" and currentPlayer == "X"):
+        if gameMode == "PP" or (gameMode == "C" and currentPlayer == "X"):    # If it's Player vs Player or Player's turn in PvC, take player input
             playerInput(board)
-        elif gameMode == "C" and currentPlayer == "O":
+        elif gameMode == "C" and currentPlayer == "O":                        # If it's Player vs Computer and Computer's turn, make computer move
             computer(board)
         checkGameWin()
         checkTie(board)
         switchPlayer()
 
-        # playerInput(board)
-        # checkGameWin()
-        # checkTie(board)
-        # switchPlayer()
-        # computer(board)
-        # checkGameWin
-        # checkTie(board)
+
 
 main()  # Starts the main loop initially
 
