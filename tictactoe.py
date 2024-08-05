@@ -10,6 +10,7 @@ board = ["-", "-", "-",
 currentPlayer = "X"
 winner = None
 gameRunning = True
+gameMode = None #Option for player to choose GameMode
 
 # Printing the game board
 def printBoard(board):
@@ -83,13 +84,16 @@ def switchPlayer():
     else:
         currentPlayer = "X"
 
+
 # Computer move
 def computer(board):
     while currentPlayer == "O":
         position = random.randint(0, 8)
         if board[position] == "-":
             board[position] = "O"
-            switchPlayer()
+            # switchPlayer()
+            print(f"Computer has made a move at position {position}")
+            break
 
 
 # Restart the game
@@ -111,21 +115,49 @@ def restartGame():
 
 # Main game loop
 def main():
-    global gameRunning
+    global gameRunning, gameMode
+    gameMode = input("Would you like to play Player vs. Player (Type PP) or Player vs. Computer (Type C)? ").upper()
+    while gameMode not in ["PP", "C"]:
+        gameMode = input("Invalid choice. Please type PP for Player vs Player or C for Player vs Computer: ").upper()
+    
+    if gameMode == "PP":
+        print("You have selected Player vs Player mode.")
+    elif gameMode == "C":
+        print("You have selected Player vs Computer mode.")
+
     while gameRunning:
         printBoard(board)
         if winner != None:
             break
-        playerInput(board)
+        if gameMode == "PP" or (gameMode == "C" and currentPlayer == "X"):
+            playerInput(board)
+        elif gameMode == "C" and currentPlayer == "O":
+            computer(board)
         checkGameWin()
         checkTie(board)
         switchPlayer()
-        computer(board)
-        checkGameWin
-        checkTie(board)
 
-main()  # Start the main loop initially
+        # playerInput(board)
+        # checkGameWin()
+        # checkTie(board)
+        # switchPlayer()
+        # computer(board)
+        # checkGameWin
+        # checkTie(board)
+
+main()  # Starts the main loop initially
 
 
+#-------------WHAT I WANT TO IMPLEMENT FURTHER------------
 
 #Want to create a tab that keeps track of score between two players Player 1 and 2 and can reset the score.
+#Create a system that randomly alternates between who goes first Player 1 vs Player 2
+#Always have player 1 go first in PvP and PvC
+
+
+
+#=========Extremely Advanced============
+#Allow one central area to pick modes for PvP or PvC, or grid size(3x3 vs 5x5 vs 7x7)
+#Train the computer to get better with AI libraries
+#Expand the grid to be not just 3x3 but 4x4 or 5x5
+#Change UI and UX Design, colors of terminal.
