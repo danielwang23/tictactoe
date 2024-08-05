@@ -1,6 +1,7 @@
 
 import random
 
+
 #Global Variables
 board = ["-", "-", "-",
          "-", "-", "-",
@@ -18,11 +19,29 @@ starting_player = "X"   # Track who starts the game
 
 # Printing the game board
 def printBoard(board):
-    print(board[0] + " | " + board[1] + " | " + board[2])
-    print("---------")
-    print(board[3] + " | " + board[4] + " | " + board[5])
-    print("---------")
-    print(board[6] + " | " + board[7] + " | " + board[8])
+    # ANSI escape codes directly for color coding in the terminal
+    for i in range(0, 9, 3):
+        row = ""
+        for j in range(3):
+            cell = board[i + j]
+            if cell == "X":
+                row += "\033[91m" + cell + "\033[0m"  # Red for X
+            elif cell == "O":
+                row += "\033[94m" + cell + "\033[0m"  # Blue for O
+            else:
+                row += cell
+            if j < 2:
+                row += " | "
+        print(row)
+        if i < 6:
+            print("---------")
+    
+    # ===== Original Code if choose not to use ANSI escape codes above to form table =======
+    # print(board[0] + " | " + board[1] + " | " + board[2])
+    # print("---------")
+    # print(board[3] + " | " + board[4] + " | " + board[5])
+    # print("---------")
+    # print(board[6] + " | " + board[7] + " | " + board[8])
 
 
 # Taking a player input
